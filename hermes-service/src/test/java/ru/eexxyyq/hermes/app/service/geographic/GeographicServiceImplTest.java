@@ -8,7 +8,6 @@ import ru.eexxyyq.hermes.app.model.entity.transport.TransportType;
 import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
 import ru.eexxyyq.hermes.app.persistence.repository.InMemoryCityRepositoryImpl;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 

@@ -5,7 +5,6 @@ import ru.eexxyyq.hermes.app.model.entity.geography.Station;
 import ru.eexxyyq.hermes.app.model.search.criteria.RangeCriteria;
 import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
 import ru.eexxyyq.hermes.app.persistence.repository.CityRepository;
-import ru.eexxyyq.hermes.app.persistence.repository.InMemoryCityRepositoryImpl;
 
 import javax.inject.Inject;
 import java.util.HashSet;
