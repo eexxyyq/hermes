@@ -27,7 +27,7 @@ public class City extends BaseEntity {
     @Setter
     private String region;
 
-    private Set<Station> stations;
+    private Set<Station> stations = new HashSet<>();
 
     public City(String name) {
         this.name = name;

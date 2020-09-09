@@ -29,7 +29,7 @@ public class InMemoryCityRepositoryImpl implements CityRepository {
         }
 
         city.getStations().forEach(station -> {
-            if (station.getId().equals(0L)) {
+            if (station.getId() != null && station.getId().equals(0L)) {
                 station.setId(++stationCount);
             }
         });
