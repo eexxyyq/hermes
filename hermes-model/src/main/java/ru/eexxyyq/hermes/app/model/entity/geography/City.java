@@ -1,10 +1,11 @@
 package ru.eexxyyq.hermes.app.model.entity.geography;
 
 import lombok.*;
+import ru.eexxyyq.hermes.app.common.utils.CommonUtils;
 import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
 import ru.eexxyyq.hermes.app.model.entity.transport.TransportType;
-import ru.eexxyyq.hermes.app.common.utils.CommonUtils;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,19 +15,27 @@ import java.util.Set;
  * @created 03/09/2020 - 15:36
  * @project hermes
  */
+@Table(name = "CITY")
+@Entity
 @EqualsAndHashCode(callSuper = true, exclude = "stations")
 @NoArgsConstructor
 public class City extends BaseEntity {
     @Getter
     @Setter
+    @Column(name = "NAME", nullable = false, length = 32)
     private String name;
+
     @Getter
     @Setter
+    @Column(name = "DISTRICT", nullable = false, length = 32)
     private String district;
+
     @Getter
     @Setter
+    @Column(name = "REGION", nullable = false, length = 32)
     private String region;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "city", orphanRemoval = true)
     private Set<Station> stations = new HashSet<>();
 
     public City(String name) {

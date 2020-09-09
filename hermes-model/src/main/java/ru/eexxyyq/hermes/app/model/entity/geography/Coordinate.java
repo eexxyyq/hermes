@@ -1,10 +1,8 @@
 package ru.eexxyyq.hermes.app.model.entity.geography;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
+
+import javax.persistence.Embeddable;
 
 /**
  * @author yatixonov
@@ -12,9 +10,10 @@ import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
  * @project hermes
  */
 
+
+@Embeddable
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Coordinate extends BaseEntity {
+public class Coordinate {
     private Double x;
     private Double y;
 }

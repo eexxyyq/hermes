@@ -1,10 +1,9 @@
 package ru.eexxyyq.hermes.app.model.entity.geography;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * @author yatixonov
@@ -12,15 +11,18 @@ import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
  * @project hermes
  */
 
+@Embeddable
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Address extends BaseEntity {
+public class Address {
+    @Column(name = "ZIP_CODE", length = 10)
     private String zipCode;
 
+    @Column(name = "STREET", length = 10)
     private String street;
 
     /**
      * (Optional) if it's address of apartment
      */
+    @Column(name = "APARTMENT", length = 16)
     private String apartment;
 }

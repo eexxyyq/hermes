@@ -61,6 +61,18 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.4.11.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-tools</artifactId>
+            <version>5.4.21.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>5.4.21.Final</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
