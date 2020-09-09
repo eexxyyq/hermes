@@ -6,7 +6,9 @@ import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.geography.Station;
 import ru.eexxyyq.hermes.app.model.entity.transport.TransportType;
 import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
+import ru.eexxyyq.hermes.app.persistence.repository.InMemoryCityRepositoryImpl;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ class GeographicServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new GeographicServiceImpl();
+        service = new GeographicServiceImpl(new InMemoryCityRepositoryImpl());
     }
 
     @Test

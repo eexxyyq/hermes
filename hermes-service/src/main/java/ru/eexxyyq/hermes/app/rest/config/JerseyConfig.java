@@ -12,6 +12,7 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("api")
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
+        super(ComponentFeature.class);
         packages("ru.eexxyyq.hermes.app.rest");
     }
 }

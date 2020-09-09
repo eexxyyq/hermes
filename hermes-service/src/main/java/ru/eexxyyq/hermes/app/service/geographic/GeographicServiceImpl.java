@@ -7,6 +7,7 @@ import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
 import ru.eexxyyq.hermes.app.persistence.repository.CityRepository;
 import ru.eexxyyq.hermes.app.persistence.repository.InMemoryCityRepositoryImpl;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,9 @@ import java.util.stream.Collectors;
 public class GeographicServiceImpl implements GeographicService {
     private final CityRepository cities;
 
-    public GeographicServiceImpl() {
-        this.cities = new InMemoryCityRepositoryImpl();
+    @Inject
+    public GeographicServiceImpl(CityRepository cities) {
+        this.cities = cities;
     }
 
     @Override

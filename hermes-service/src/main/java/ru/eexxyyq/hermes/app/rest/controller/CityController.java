@@ -9,6 +9,7 @@ import ru.eexxyyq.hermes.app.service.geographic.GeographicServiceImpl;
 import ru.eexxyyq.hermes.app.service.transform.SimpleDTOTransformerImpl;
 import ru.eexxyyq.hermes.app.service.transform.Transformer;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,9 +26,11 @@ import java.util.stream.Collectors;
 public class CityController extends BaseController {
     private final GeographicService service;
     private final Transformer transformer;
-    public CityController() {
-        transformer = new SimpleDTOTransformerImpl();
-        service = new GeographicServiceImpl();
+
+    @Inject
+    public CityController(GeographicService service, Transformer transformer) {
+        this.transformer = transformer;
+        this.service = service;
         City city = new City("Moscow");
         city.addStation(TransportType.AVIA);
         service.saveCity(city);
