@@ -1,9 +1,8 @@
 package ru.eexxyyq.hermes.app.model.entity.geography;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
 import ru.eexxyyq.hermes.app.model.entity.transport.TransportType;
@@ -20,18 +19,16 @@ import java.util.Objects;
 @Table(name = "STATION")
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Getter
+@Data
 @NoArgsConstructor
 public class Station extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CITY_ID")
     private City city;
 
-    @Setter
     @Embedded
     private Address address;
 
-    @Setter
     @Embedded
     private Coordinate coordinate;
 

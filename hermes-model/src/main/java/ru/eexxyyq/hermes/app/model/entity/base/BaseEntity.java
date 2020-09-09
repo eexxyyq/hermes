@@ -28,4 +28,11 @@ public class BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODIFIED_BY", insertable = false)
     private Account modifiedBy;
+
+    @PrePersist
+    public void prePersist() {
+        if (getId() == null || getId() == 0) {
+            setCreatedDT(LocalDateTime.now());
+        }
+    }
 }

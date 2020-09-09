@@ -5,8 +5,6 @@ import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.transport.TransportType;
 import ru.eexxyyq.hermes.app.rest.dto.CityDTO;
 import ru.eexxyyq.hermes.app.service.geographic.GeographicService;
-import ru.eexxyyq.hermes.app.service.geographic.GeographicServiceImpl;
-import ru.eexxyyq.hermes.app.service.transform.SimpleDTOTransformerImpl;
 import ru.eexxyyq.hermes.app.service.transform.Transformer;
 
 import javax.inject.Inject;
@@ -32,6 +30,8 @@ public class CityController extends BaseController {
         this.transformer = transformer;
         this.service = service;
         City city = new City("Moscow");
+        city.setDistrict("Msc");
+        city.setRegion("Msc");
         city.addStation(TransportType.AVIA);
         service.saveCity(city);
     }
