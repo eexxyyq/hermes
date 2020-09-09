@@ -34,7 +34,7 @@ public class City extends BaseEntity {
     }
 
     public Set<Station> getStations() {
-        return CommonUtils.getSafeList(stations);
+        return CommonUtils.getSafeSet(stations);
     }
 
     public void addStation(@NonNull final Station station) {

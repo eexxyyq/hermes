@@ -11,5 +11,13 @@
 
     <artifactId>hermes-persistence</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.eexxyyq</groupId>
+            <artifactId>hermes-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -1,12 +1,16 @@
 package ru.eexxyyq.hermes.app.service.geographic;
 
-import ru.eexxyyq.hermes.app.common.utils.CommonUtils;
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.geography.Station;
 import ru.eexxyyq.hermes.app.model.search.criteria.RangeCriteria;
 import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
+import ru.eexxyyq.hermes.app.persistence.repository.CityRepository;
+import ru.eexxyyq.hermes.app.persistence.repository.InMemoryCityRepositoryImpl;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -15,38 +19,32 @@ import java.util.stream.Collectors;
  * @project hermes
  */
 public class GeographicServiceImpl implements GeographicService {
-    private final List<City> cities;
-    private long counter = 0L;
+    private final CityRepository cities;
 
     public GeographicServiceImpl() {
-        this.cities = new ArrayList<>();
+        this.cities = new InMemoryCityRepositoryImpl();
     }
 
     @Override
     public List<City> findCities() {
-        return CommonUtils.getSafeList(cities);
+        return cities.findAll();
     }
 
     @Override
     public void saveCity(City city) {
-        if(!this.cities.contains(city)) {
-            city.setId(++counter);
-            this.cities.add(city);
-        }
+        cities.save(city);
     }
 
     @Override
     public Optional<City> findCityById(long id) {
-        return this.cities.stream().filter(city -> city.getId().equals(id)).findFirst();
+        return Optional.ofNullable(cities.findById(id));
     }
 
     @Override
     public List<Station> searchStations(StationSearchCriteria criteria, RangeCriteria rangeCriteria) {
         Set<Station> stations = new HashSet<>();
 
-        for (City city : this.cities) {
-            stations.addAll(city.getStations());
-        }
+        cities.findAll().forEach(city -> stations.addAll(city.getStations()));
 
         return stations
                 .stream()

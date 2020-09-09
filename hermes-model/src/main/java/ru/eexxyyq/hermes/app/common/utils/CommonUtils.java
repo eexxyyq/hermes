@@ -15,7 +15,7 @@ import java.util.Set;
  */
 
 public interface CommonUtils {
-    static <T> Set<T> getSafeList(Set<T> sourceSet) {
+    static <T> Set<T> getSafeSet(Set<T> sourceSet) {
         return Collections.unmodifiableSet(Optional.ofNullable(sourceSet).orElse(Collections.emptySet()));
     }
 
