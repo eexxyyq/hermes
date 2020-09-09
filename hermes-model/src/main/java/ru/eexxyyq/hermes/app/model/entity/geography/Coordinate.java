@@ -2,6 +2,7 @@ package ru.eexxyyq.hermes.app.model.entity.geography;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -14,6 +15,9 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Data
 public class Coordinate {
+    @Column(name = "X_COORDINATE")
     private Double x;
+
+    @Column(name = "Y_COORDINATE")
     private Double y;
 }
