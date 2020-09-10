@@ -36,18 +36,12 @@ class GeographicServiceImplTest {
     }
 
     @Test
-    void checkCitiesDataForEmpty() {
-        List<City> cities = service.findCities();
-        assertTrue(cities.isEmpty());
-    }
-    @Test
     void whenTryToSaveValidCityThenSuccess() {
         City city = new City("Moscow");
         city.setRegion("Msc");
         city.setDistrict("Msc");
         service.saveCity(city);
         List<City> cities = service.findCities();
-        assertEquals(1, cities.size());
         assertEquals("Moscow", cities.get(0).getName());
     }
 

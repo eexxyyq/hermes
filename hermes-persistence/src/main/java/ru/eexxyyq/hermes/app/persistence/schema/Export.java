@@ -6,12 +6,9 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQL10Dialect;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
-import ru.eexxyyq.hermes.app.model.entity.geography.Address;
-import ru.eexxyyq.hermes.app.model.entity.geography.City;
-import ru.eexxyyq.hermes.app.model.entity.geography.Coordinate;
-import ru.eexxyyq.hermes.app.model.entity.geography.Station;
-import ru.eexxyyq.hermes.app.model.entity.person.Account;
+import org.reflections.Reflections;
 
+import javax.persistence.Entity;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -29,8 +26,8 @@ public class Export {
                                 .applySetting("hibernate.dialect", dialect.getName())
                                 .build());
 
-        Set<Class<?>> entityClasses =
-                Set.of(City.class, Address.class, Station.class, Coordinate.class, Account.class);
+        Reflections reflections = new Reflections("ru.eexxyyq.hermes.app.model.entity");
+        Set<Class<?>> entityClasses = reflections.getTypesAnnotatedWith(Entity.class);
         entityClasses.forEach(metadata::addAnnotatedClass);
 
         SchemaExport schemaExport = new SchemaExport();

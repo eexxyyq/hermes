@@ -4,17 +4,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
+import org.reflections.Reflections;
 import ru.eexxyyq.hermes.app.common.exception.PersistenceException;
-import ru.eexxyyq.hermes.app.model.entity.geography.Address;
-import ru.eexxyyq.hermes.app.model.entity.geography.City;
-import ru.eexxyyq.hermes.app.model.entity.geography.Station;
-import ru.eexxyyq.hermes.app.model.entity.person.Account;
 import ru.eexxyyq.hermes.app.persistence.interceptor.TimeStampInterceptor;
 
 import javax.annotation.PreDestroy;
+import javax.persistence.Entity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author yatixonov
@@ -28,10 +27,9 @@ public class SessionFactoryBuilder {
     public SessionFactoryBuilder() {
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(loadProperties()).build();
         MetadataSources sources = new MetadataSources(serviceRegistry);
-        sources.addAnnotatedClass(Address.class);
-        sources.addAnnotatedClass(City.class);
-        sources.addAnnotatedClass(Station.class);
-        sources.addAnnotatedClass(Account.class);
+        Reflections reflections = new Reflections("ru.eexxyyq.hermes.app.model.entity");
+        Set<Class<?>> entityClasses = reflections.getTypesAnnotatedWith(Entity.class);
+        entityClasses.forEach(sources::addAnnotatedClass);
 
         org.hibernate.boot.SessionFactoryBuilder builder = sources.getMetadataBuilder()
                 .build().getSessionFactoryBuilder()
