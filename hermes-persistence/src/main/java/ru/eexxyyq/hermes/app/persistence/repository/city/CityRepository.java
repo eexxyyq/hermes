@@ -1,4 +1,4 @@
-package ru.eexxyyq.hermes.app.persistence.repository;
+package ru.eexxyyq.hermes.app.persistence.repository.city;
 
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 

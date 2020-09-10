@@ -22,6 +22,8 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 public class Station extends BaseEntity {
+    public static final String FIELD_TRANSPORT_TYPE = "transportType";
+    public static final String FIELD_CITY = "city";
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CITY_ID")
     private City city;

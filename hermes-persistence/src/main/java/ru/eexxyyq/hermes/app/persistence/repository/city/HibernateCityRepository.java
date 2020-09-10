@@ -1,8 +1,7 @@
-package ru.eexxyyq.hermes.app.persistence.repository;
+package ru.eexxyyq.hermes.app.persistence.repository.city;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import ru.eexxyyq.hermes.app.model.entity.base.BaseEntity;
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.persistence.hibernate.SessionFactoryBuilder;
 
@@ -30,10 +29,6 @@ public class HibernateCityRepository implements CityRepository {
     @Override
     public void save(City city) {
         try (Session session = sessionFactory.openSession()) {
-            city.prePersist();
-            if (city.getStations() != null) {
-                city.getStations().forEach(BaseEntity::prePersist);
-            }
             session.saveOrUpdate(city);
         }
     }

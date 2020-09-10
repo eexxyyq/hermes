@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Data
 public class BaseEntity {
+    public static final String FIELD_CREATED_AT = "createdAt";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

@@ -20,6 +20,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true, exclude = "stations")
 @NoArgsConstructor
 public class City extends BaseEntity {
+    public static final String FIELD_NAME = "name";
     @Getter
     @Setter
     @Column(name = "NAME", nullable = false, length = 32)

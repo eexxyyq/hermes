@@ -9,6 +9,7 @@ import ru.eexxyyq.hermes.app.model.entity.geography.Address;
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.geography.Station;
 import ru.eexxyyq.hermes.app.model.entity.person.Account;
+import ru.eexxyyq.hermes.app.persistence.interceptor.TimeStampInterceptor;
 
 import javax.annotation.PreDestroy;
 import java.io.IOException;
@@ -31,7 +32,11 @@ public class SessionFactoryBuilder {
         sources.addAnnotatedClass(City.class);
         sources.addAnnotatedClass(Station.class);
         sources.addAnnotatedClass(Account.class);
-        this.sessionFactory = sources.buildMetadata().buildSessionFactory();
+
+        org.hibernate.boot.SessionFactoryBuilder builder = sources.getMetadataBuilder()
+                .build().getSessionFactoryBuilder()
+                .applyInterceptor(new TimeStampInterceptor());
+        this.sessionFactory = builder.build();
     }
 
     private Properties loadProperties() {

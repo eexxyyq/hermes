@@ -4,14 +4,12 @@ import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.geography.Station;
 import ru.eexxyyq.hermes.app.model.search.criteria.RangeCriteria;
 import ru.eexxyyq.hermes.app.model.search.criteria.StationSearchCriteria;
-import ru.eexxyyq.hermes.app.persistence.repository.CityRepository;
+import ru.eexxyyq.hermes.app.persistence.repository.city.CityRepository;
+import ru.eexxyyq.hermes.app.persistence.repository.station.StationRepository;
 
 import javax.inject.Inject;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author yatixonov
@@ -20,10 +18,12 @@ import java.util.stream.Collectors;
  */
 public class GeographicServiceImpl implements GeographicService {
     private final CityRepository cities;
+    private final StationRepository stations;
 
     @Inject
-    public GeographicServiceImpl(CityRepository cities) {
+    public GeographicServiceImpl(CityRepository cities, StationRepository stations) {
         this.cities = cities;
+        this.stations = stations;
     }
 
     @Override
@@ -43,13 +43,6 @@ public class GeographicServiceImpl implements GeographicService {
 
     @Override
     public List<Station> searchStations(StationSearchCriteria criteria, RangeCriteria rangeCriteria) {
-        Set<Station> stations = new HashSet<>();
-
-        cities.findAll().forEach(city -> stations.addAll(city.getStations()));
-
-        return stations
-                .stream()
-                .filter(station -> station.match(criteria))
-                .collect(Collectors.toList());
+        return stations.findAllByCriteria(criteria);
     }
 }
