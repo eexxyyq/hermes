@@ -2,6 +2,9 @@ package ru.eexxyyq.hermes.app.persistence.repository.city;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.persistence.hibernate.SessionFactoryBuilder;
 
@@ -19,6 +22,7 @@ import java.util.List;
  */
 
 public class HibernateCityRepository implements CityRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateCityRepository.class);
     private final SessionFactory sessionFactory;
 
     @Inject
@@ -27,9 +31,18 @@ public class HibernateCityRepository implements CityRepository {
     }
 
     @Override
-    public void save(City city) {
+    public synchronized void save(City city) {
+        Transaction tx = null;
+
         try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
             session.saveOrUpdate(city);
+            tx.commit();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            if (tx != null) {
+                tx.rollback();
+            }
         }
     }
 

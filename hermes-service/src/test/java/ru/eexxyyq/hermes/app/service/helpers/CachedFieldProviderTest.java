@@ -56,12 +56,13 @@ public class CachedFieldProviderTest {
         assertEquals(fields, fields2);
     }
 
+    static class Source {
+        int value;
+    }
+
+    static class Destination {
+        int value;
+    }
 }
 
-class Source {
-    int value;
-}
 
-class Destination {
-    int value;
-}

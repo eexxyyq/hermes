@@ -1,6 +1,7 @@
 package ru.eexxyyq.hermes.app.service.geographic;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.eexxyyq.hermes.app.model.entity.geography.City;
 import ru.eexxyyq.hermes.app.model.entity.geography.Station;
@@ -12,8 +13,12 @@ import ru.eexxyyq.hermes.app.persistence.repository.city.HibernateCityRepository
 import ru.eexxyyq.hermes.app.persistence.repository.station.HibernateStationRepositoryImpl;
 import ru.eexxyyq.hermes.app.persistence.repository.station.StationRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,15 +29,23 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 class GeographicServiceImplTest {
-    GeographicService service;
+    private static GeographicService service;
+    private static ExecutorService executorService;
     private final long DEFAULT_CITY_ID = 1L;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    public static void setUp() {
         SessionFactoryBuilder builder = new SessionFactoryBuilder();
         CityRepository repository = new HibernateCityRepository(builder);
         StationRepository stationRepository = new HibernateStationRepositoryImpl(builder);
         service = new GeographicServiceImpl(repository, stationRepository);
+
+        executorService = Executors.newCachedThreadPool();
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        executorService.shutdown();
     }
 
     @Test
@@ -42,7 +55,7 @@ class GeographicServiceImplTest {
         city.setDistrict("Msc");
         service.saveCity(city);
         List<City> cities = service.findCities();
-        assertEquals("Moscow", cities.get(0).getName());
+        assertEquals("Odessa0", cities.get(0).getName());
     }
 
     @Test
@@ -85,5 +98,81 @@ class GeographicServiceImplTest {
         assertEquals(0, stations.size());
     }
 
+    @Test
+    void testSaveMultipleCitiesSuccess() {
+        int cityCount = service.findCities().size();
+        int addedCount = 100_000;
+        for (int i = 0; i < addedCount; i++) {
+            City city = new City("Odessa" + i);
+            city.setDistrict("Odessa");
+            city.setRegion("Odessa");
+            city.addStation(TransportType.AUTO);
+            service.saveCity(city);
+        }
 
+        List<City> cities = service.findCities();
+        assertEquals(cities.size(), cityCount + addedCount);
+    }
+
+    @Test
+    void testSaveMultipleCitiesConcurrentlySuccess() {
+        int cityCount = service.findCities().size();
+        int threadCount = 200;
+        int batchCount = 10;
+        List<Future<?>> futures = new ArrayList<>();
+
+        for (int i = 0; i < threadCount; i++) {
+            futures.add(executorService.submit(() -> {
+                for (int j = 0; j < batchCount; j++) {
+                    City city = new City("Lviv_" + Math.random());
+                    city.setDistrict("Lviv");
+                    city.setRegion("Lviv");
+                    city.addStation(TransportType.AUTO);
+                    service.saveCity(city);
+                }
+            }));
+        }
+
+        waitForFutures(futures);
+
+        List<City> cities = service.findCities();
+        assertEquals(cities.size(), cityCount + threadCount * batchCount);
+    }
+
+
+    @Test
+    void testSaveOneCityConcurrentlySuccess() {
+        City city = new City("Nikolaev");
+        city.setDistrict("Nikolaev");
+        city.setRegion("Nikolaev");
+        city.addStation(TransportType.AUTO);
+        service.saveCity(city);
+
+        int cityCount = service.findCities().size();
+        int threadCount = 200;
+        List<Future<?>> futures = new ArrayList<>();
+
+        for (int i = 0; i < threadCount; i++) {
+            futures.add(executorService.submit(() -> {
+                city.setName("Nikolaev" + Math.random());
+                city.setDistrict("Msc");
+                city.setRegion("Msc");
+                service.saveCity(city);
+            }));
+        }
+        waitForFutures(futures);
+
+        List<City> cities = service.findCities();
+        assertEquals(cities.size(), cityCount);
+    }
+
+    private void waitForFutures(List<Future<?>> futures) {
+        futures.forEach(future -> {
+            try {
+                future.get();
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
+        });
+    }
 }
